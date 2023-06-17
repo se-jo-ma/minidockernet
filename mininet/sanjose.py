@@ -42,7 +42,7 @@ class NetworkTopo( Topo ):
 def run():
     "Test linux router"
     topo = NetworkTopo()
-    net = Mininet( topo=topo )  # controller is used by s1-s3
+    net = Mininet( switch=LinuxBridge, topo=topo )  # controller is used by s1-s3
     net.start()
     # info( '*** Routing Table on Router:\n' )
     print(net[ 'rtg1' ].cmd( 'route' ))
