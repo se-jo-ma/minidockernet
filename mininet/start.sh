@@ -38,7 +38,7 @@ sudo brctl show
 echo 'Built Linux Bridge'
 
 echo Starting Mininet Project
-python3 /root/sanjose.py
+python3 /root/bsanjose.py
 
 # Catch the shell if need be
 echo Catching the shell
