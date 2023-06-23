@@ -5,7 +5,7 @@ RUN apt update \
         iproute2 \
         git \
         sudo \
-        rsyslog \
+        nano \
         snmp \
         snmpd \
         python3 \
@@ -14,11 +14,22 @@ RUN apt update \
         net-tools \
         iputils-ping \
         traceroute \
-&& pip install pyinstaller setuptools waf-build ryu \
-&& git clone https://github.com/mininet/mininet
+        python3-dev \
+        libpq-dev \
+&& pip install pyinstaller \
+        setuptools \
+        waf-build \
+        ryu \
+        psycopg2 \
+&& git clone https://github.com/mininet/mininet \
+&& /mininet/util/install.sh -nfv \
+&& sudo mv /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf.org \
+&& echo "rocommunity public" >> /etc/snmp/snmpd.conf \
+&& echo "SNMPDOPTS='-LSwd -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -p /run/snmpd.pid -c /etc/snmp/snmpd.conf'" >> /etc/default/snmpd
 
-COPY ./sanjose.py /root/sanjose.py
-COPY ./start.sh /root/start.sh
+COPY ./sanjose.py ./start.sh /root/
+COPY ./rsyslog.conf /etc/rsyslog.conf
 
-#Needs to be run on the host machine after spin up. Put into sh file?
-CMD [ "/bin/sh" ]
+WORKDIR /root
+
+CMD [ "/bin/sh", "/root/start.sh" ]
